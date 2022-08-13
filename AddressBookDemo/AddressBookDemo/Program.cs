@@ -40,9 +40,9 @@ namespace AddressBook
                         break;
                     case 4:
                         //Editing a contact details with given name(UC3)
-                        Console.Write("Enter The First Name Exactly To Edit Contact Records: ");
-                        string fName = Console.ReadLine();
-                        addressBook.EditContact(fName);
+                        Console.Write("Enter The First Name Exactly To View Contact Records: ");
+                        string personName = Console.ReadLine();
+                        addressBook.ViewContact(personName);
                         break;
                     case 5:
                         //Deleting a contact details with given name(UC4)
