@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace AddressBook
 {
     public class AddContact
     {
-        public static void PersonDetails(AddressBookEntry addressBook)
+        public static void PersonDetails(AddressBookEntry addressBook, string bookName)
         {
             //Creating a contact with person details(UC1)
             Console.Write("Enter Your First Name : ");
@@ -21,15 +20,20 @@ namespace AddressBook
             string city = Console.ReadLine();
             Console.Write("Enter Your State Name : ");
             string state = Console.ReadLine();
-            Console.Write("Enter Your Area Postal Code : ");
-            int PostalCode = int.Parse(Console.ReadLine());
+            Console.Write("Enter Your Area Zip Code : ");
+            int zip = int.Parse(Console.ReadLine());
             Console.Write("Enter Your Phone Number : ");
             long phoneNum = long.Parse(Console.ReadLine());
             Console.Write("Enter Your EmailId : ");
             string emailId = Console.ReadLine();
             //User Data Entry            
-            addressBook.AddContactDetails(firstName, lastName, address, city, state, PostalCode, phoneNum, emailId);
+            addressBook.AddContactDetails(firstName, lastName, address, city, state, zip, phoneNum, emailId, bookName);
             Console.ReadLine();
+        }
+
+        internal static void PersonDetails(AddressBookEntry addressBook)
+        {
+            throw new NotImplementedException();
         }
     }
 }
