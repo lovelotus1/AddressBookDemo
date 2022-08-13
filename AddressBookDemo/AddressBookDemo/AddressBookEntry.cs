@@ -5,20 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 namespace AddressBook
 {
+    /// <summary>
+    /// Creating The Address Book For Adding Multiple Books And Multiple Person
+    /// </summary>
     public class AddressBookEntry : IContact
     {
         //Creating a contact list
         private readonly List<Contact> contactList;
         private readonly Dictionary<string, AddressBookEntry> addressContactBook;
-        private long phoneNumber;
-        private int count;
-
         public AddressBookEntry()
         {
             contactList = new List<Contact>();
             addressContactBook = new Dictionary<string, AddressBookEntry>();
         }
-        //Method to create contact(UC1)
+        //Method to create contact(UC1) 
         public void AddContactDetails(string firstName, string lastName, string address, string city, string state, int zip, long phoneNumber, string emailId, string bookName)
         {
             try
@@ -39,11 +39,13 @@ namespace AddressBook
                 Console.WriteLine(ex.Message);
             }
         }
+        //Method to view contact
         public void ViewContact(string bookName)
         {
+            int count = 1;
             foreach (var contact in addressContactBook[bookName].contactList)
             {
-                Console.WriteLine("Person Details {0} ------> ", count);
+                Console.WriteLine("Person Details Of {0} ------> ", contact.firstName);
                 Console.WriteLine("First Name : {0} || Last Name : {1}", contact.firstName, contact.lastName);
                 Console.WriteLine("Address : {0} ", contact.address);
                 Console.WriteLine("City Name : {0} || State Name : {1} || ZipCode : {2}", contact.city, contact.state, contact.Zip);
@@ -53,7 +55,7 @@ namespace AddressBook
                 count++;
             }
         }
-
+        //Method to view single contact
         public void ViewContact(string personName, string bookName)
         {
             foreach (var contact in addressContactBook[bookName].contactList)
@@ -69,7 +71,6 @@ namespace AddressBook
                 }
             }
         }
-
         //Method to edit contacts(UC3)
         public void EditContact(string personName, string bookName)
         {
@@ -79,9 +80,8 @@ namespace AddressBook
                 var contact = addressContactBook[bookName].contactList[i];
                 EditContactDetails.EditPersonDetails(contact, personName);
             }
-
-
         }
+        //Method to delete contact details using first name(UC4)
         public void DeleteContact(string personName, string bookName)
         {
             for (int i = 0; i < addressContactBook[bookName].contactList.Count; i++)
@@ -92,9 +92,11 @@ namespace AddressBook
                     Console.WriteLine("Record Of {0} Deleted Successfully", contact.firstName);
                     addressContactBook[bookName].contactList.RemoveAt(i);
                 }
+                else
+                    Console.WriteLine("Contact Not Found");
             }
         }
-        //Refactor to add multiple Address Book to the system (UC6)
+        //Refactor to add multiple Address Book to the System(UC6)
         public void AddAddressBook(string addBookName)
         {
             var contact = addressContactBook;
@@ -109,36 +111,84 @@ namespace AddressBook
                 Console.WriteLine("AddressBook Created.\n");
             }
         }
-
-        internal void EditContact(string? fName)
-        {
-            throw new NotImplementedException();
-        }
-
         //For Checking If AddressBook Is Present Or Not(UC6)
         public void CheckAddressBook(string bookName)
         {
-            foreach (var contact in addressContactBook)
+            foreach (var book in addressContactBook)
             {
-                if (contact.Key == bookName)
+                if (book.Key == bookName)
                 {
                     Console.WriteLine("Switching To Book Name : " + bookName);
                     Console.ReadLine();
                     break;
                 }
-                else
-                {
-                    Console.Write("Book Name Doesnt Exist");
-                    Console.ReadLine();
-                    break;
-                }
-
             }
+            Console.Write("Book Name Doesnt Exist");
         }
         //Returning the bookname with contact values to view(UC6 
         public Dictionary<string, AddressBookEntry> GetAddressBook()
         {
             return addressContactBook;
+        }
+        //Returning list of values from particular book (UC7)
+        public List<Contact> GetListOfAddressBookValues(string bookName)
+        {
+            List<Contact> book = new List<Contact>();
+            if (bookName != null)
+            {
+                foreach (var value in addressContactBook[bookName].contactList)
+                {
+                    book.Add(value);
+                }
+                return book;
+            }
+            else
+                return default;
+        }
+        //Checking For Duplicate Entry If Any(UC7)
+        public bool CheckDuplicateEntry(Contact contact, string bookName)
+        {
+            List<Contact> book = GetListOfAddressBookValues(bookName);
+            if (bookName != null)
+            {
+                if (book.Any(b => b.Equals(contact)))
+                    return true;
+            }
+            return default;
+        }
+        //Method to add a new list of values from multiple books(UC8)
+        public List<Contact> GetListOfMulAddressBookValues(List<Contact> addrBookName)
+        {
+            List<Contact> book = new List<Contact>();
+            foreach (var value in addrBookName)
+            {
+                book.Add(value);
+            }
+            return book;
+        }
+        //Method to search the person by city(UC8)
+        public void SearchPersonByCity(string city)
+        {
+            foreach (AddressBookEntry addrBookObj in addressContactBook.Values)
+            {
+                List<Contact> contactList = GetListOfMulAddressBookValues(addrBookObj.contactList);
+                foreach (Contact contact in contactList.FindAll(c => c.city.Equals(city)).ToList())
+                {
+                    Console.WriteLine(contact.ToString());
+                }
+            }
+        }
+        //Method to search the person by state(UC8)
+        public void SearchPersonByState(string state)
+        {
+            foreach (AddressBookEntry addressbookobj in addressContactBook.Values)
+            {
+                List<Contact> contactList = GetListOfMulAddressBookValues(addressbookobj.contactList);
+                foreach (Contact contact in contactList.FindAll(c => c.state.Equals(state)).ToList())
+                {
+                    Console.WriteLine(contact.ToString());
+                }
+            }
         }
 
         public void AddContactDetails(string firstName, string lastName, string address, string city, string state, int zip, long phoneNumber, string emailId)
@@ -146,12 +196,12 @@ namespace AddressBook
             throw new NotImplementedException();
         }
 
-        void IContact.ViewContact()
+        public void ViewContact()
         {
             throw new NotImplementedException();
         }
 
-        void IContact.EditContact(string personName)
+        public void EditContact(string personName)
         {
             throw new NotImplementedException();
         }
@@ -160,24 +210,5 @@ namespace AddressBook
         {
             throw new NotImplementedException();
         }
-        //Checking For Duplicate Entry If Any(UC7)
-        public bool CheckDuplicateEntry(Contact contact, string bookName)
-        {
-            List<Contact> book = GetListOfDictctionaryKeys(bookName);
-            if (bookName != null)
-            {
-                if (book.Any(b => b.Equals(contact)))
-                    return true;
-            }
-            return default;
-        }
-
-        private List<Contact> GetListOfDictctionaryKeys(string bookName)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
-    
-
-    

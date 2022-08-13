@@ -15,9 +15,7 @@ namespace AddressBook
         public string state;
         public int Zip;
         public long phoneNumber;
-
         public string emailId;
-
         //Parametrized constructor to initialize the addressbook values
         public Contact(string firstName, string lastName, string address, string city, string state, int Zip, long phoneNumber, string emailId)
         {
@@ -39,9 +37,15 @@ namespace AddressBook
             else
                 return firstName.Equals(contact.firstName) && lastName.Equals(contact.lastName);
         }
+        //Overiding hashcode method
         public override int GetHashCode()
         {
             return default;
+        }
+        //overiding string method to display the values search for city and state(UC8)
+        public override string ToString()
+        {
+            return $"First Name: {firstName} \nLast Name: {lastName} \nCity {city} \nState: {state} \nEmail: {emailId} \nZip {Zip} \nPhone Number: {phoneNumber}\n";
         }
     }
 }
