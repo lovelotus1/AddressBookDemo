@@ -13,6 +13,9 @@ namespace AddressBook
         //Creating a contact list
         private readonly List<Contact> contactList;
         private readonly Dictionary<string, AddressBookEntry> addressContactBook;
+
+        private Dictionary<Contact, string> personsCity = new Dictionary<Contact, string>();
+        private Dictionary<Contact, string> personsState = new Dictionary<Contact, string>();
         public AddressBookEntry()
         {
             contactList = new List<Contact>();
@@ -166,12 +169,23 @@ namespace AddressBook
             }
             return book;
         }
+        //Method to add a new list of values from multiple dictionary's(UC9)
+        public List<Contact> GetListOfMulAddressBookValues(Dictionary<Contact, string> dictionaryName)
+        {
+            List<Contact> book = new List<Contact>();
+            foreach (var value in dictionaryName.Keys)
+            {
+                book.Add(value);
+            }
+            return book;
+        }
         //Method to search the person by city(UC8)
         public void SearchPersonByCity(string city)
         {
+            CreateCityDictionary();
             foreach (AddressBookEntry addrBookObj in addressContactBook.Values)
             {
-                List<Contact> contactList = GetListOfMulAddressBookValues(addrBookObj.contactList);
+                List<Contact> contactList = GetListOfMulAddressBookValues(addrBookObj.personsCity);
                 foreach (Contact contact in contactList.FindAll(c => c.city.Equals(city)).ToList())
                 {
                     Console.WriteLine(contact.ToString());
@@ -181,12 +195,35 @@ namespace AddressBook
         //Method to search the person by state(UC8)
         public void SearchPersonByState(string state)
         {
+            CreateStateDictionary();
             foreach (AddressBookEntry addressbookobj in addressContactBook.Values)
             {
-                List<Contact> contactList = GetListOfMulAddressBookValues(addressbookobj.contactList);
+                List<Contact> contactList = GetListOfMulAddressBookValues(addressbookobj.personsCity);
                 foreach (Contact contact in contactList.FindAll(c => c.state.Equals(state)).ToList())
                 {
                     Console.WriteLine(contact.ToString());
+                }
+            }
+        }
+        //Method to maintain dictionary of city and person(UC9)
+        public void CreateCityDictionary()
+        {
+            foreach (AddressBookEntry addressBookObj in addressContactBook.Values)
+            {
+                foreach (Contact contact in addressBookObj.contactList)
+                {
+                    addressBookObj.personsCity.Add(contact, contact.city);
+                }
+            }
+        }
+        //Method to maintain dictionary of state and person(UC9)
+        public void CreateStateDictionary()
+        {
+            foreach (AddressBookEntry addressBookObj in addressContactBook.Values)
+            {
+                foreach (Contact contact in addressBookObj.contactList)
+                {
+                    addressBookObj.personsState.Add(contact, contact.state);
                 }
             }
         }
