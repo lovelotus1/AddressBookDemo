@@ -126,6 +126,9 @@ namespace AddressBook
                             }
                             break;
                         case 12:
+                            addressBook.DisplayCountByCityandState();
+                            break;
+                        case 13:
                             Environment.Exit(0);
                             break;
                         default:
