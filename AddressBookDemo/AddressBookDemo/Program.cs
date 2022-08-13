@@ -10,7 +10,7 @@ namespace AddressBook
         public static string bookName;
         public static void Main(string[] args)
         {
-
+            //Display Welcome Message
             Console.WriteLine("Welcome To Address Book Program");
             //Create Objects
             AddressBookEntry addressBook = new AddressBookEntry();
@@ -33,9 +33,6 @@ namespace AddressBook
                 switch (userChoice)
                 {
                     case 1:
-                        //For adding multiple person(UC5)
-                        //Creating a new contact with person details(UC2) 
-                        AddContact.PersonDetails(addressBook);
                         //Creating a default addressbook for storing contact(UC6)
                         bookName = "Home";
                         addressBook.AddAddressBook(bookName);
@@ -77,7 +74,6 @@ namespace AddressBook
                         //Editing a contact details with given name(UC3)
                         Console.Write("Enter The First Name Exactly To Edit Contact Records: ");
                         string fName = Console.ReadLine();
-                        addressBook.EditContact(fName);
                         addressBook.EditContact(fName, bookName);
                         break;
                     case 9:
@@ -96,16 +92,17 @@ namespace AddressBook
                         while (true)
                         {
                             bookName = Console.ReadLine();
-                            if (addressBook.GetAddressBook().ContainsKey(bookName))
+                            if (!addressBook.GetAddressBook().ContainsKey(bookName))
                             {
-                                addressBook.ViewContact(bookName);
-                                break;
+                                    addressBook.ViewContact(bookName);
+                                    Console.WriteLine("Book Name Doesnt Exist");
+                                    break;
                             }
-                            else
-                            {
-                                addressBook.CheckAddressBook(bookName);
-                                break;
-                            }
+                                else
+                                {
+                                   addressBook.ViewContact(bookName);
+                                   break;
+                                }
                         }
                         break;
                     case 11:

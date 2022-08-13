@@ -18,7 +18,27 @@ namespace AddressBook
             contactList = new List<Contact>();
             addressContactBook = new Dictionary<string, AddressBookEntry>();
         }
-        //Method of view Contact
+        //Method to create contact(UC1)
+        public void AddContactDetails(string firstName, string lastName, string address, string city, string state, int zip, long phoneNumber, string emailId, string bookName)
+        {
+            try
+            {
+                Contact personDetail = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, emailId);
+                if (CheckDuplicateEntry(personDetail, bookName))
+                {
+                    Console.WriteLine("Person Already Exits In The Book");
+                }
+                else
+                {
+                    addressContactBook[bookName].contactList.Add(personDetail);
+                    Console.WriteLine("Added Contact SuccessFully\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         public void ViewContact(string bookName)
         {
             foreach (var contact in addressContactBook[bookName].contactList)
@@ -33,18 +53,12 @@ namespace AddressBook
                 count++;
             }
         }
-        internal void AddContactDetails(string? firstName, string? lastName, string? address, string? city, string? state, int zip, long phoneNum, string? emailId, string bookName)
-        {
-            Contact personDetail = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, emailId);
-            addressContactBook[bookName].contactList.Add(personDetail);
 
-        }
         public void ViewContact(string personName, string bookName)
         {
-            for (int i = 0; i < addressContactBook[bookName].contactList.Count; i++)
+            foreach (var contact in addressContactBook[bookName].contactList)
             {
-                var contact = addressContactBook[bookName].contactList[i];
-                if (contact.firstName == personName)
+                if (contact.firstName.Equals(personName))
                 {
                     Console.WriteLine("First Name : {0} || Last Name : {1}", contact.firstName, contact.lastName);
                     Console.WriteLine("Address : {0} ", contact.address);
@@ -54,21 +68,19 @@ namespace AddressBook
                     Console.ReadLine();
                 }
             }
-
         }
 
-        internal void ViewContact()
-        {
-            throw new NotImplementedException();
-        }
-
+        //Method to edit contacts(UC3)
         public void EditContact(string personName, string bookName)
         {
+            //Traversing the contact list
             for (int i = 0; i < addressContactBook[bookName].contactList.Count; i++)
             {
                 var contact = addressContactBook[bookName].contactList[i];
                 EditContactDetails.EditPersonDetails(contact, personName);
             }
+
+
         }
         public void DeleteContact(string personName, string bookName)
         {
@@ -145,6 +157,22 @@ namespace AddressBook
         }
 
         public void DeleteContact(string personName)
+        {
+            throw new NotImplementedException();
+        }
+        //Checking For Duplicate Entry If Any(UC7)
+        public bool CheckDuplicateEntry(Contact contact, string bookName)
+        {
+            List<Contact> book = GetListOfDictctionaryKeys(bookName);
+            if (bookName != null)
+            {
+                if (book.Any(b => b.Equals(contact)))
+                    return true;
+            }
+            return default;
+        }
+
+        private List<Contact> GetListOfDictctionaryKeys(string bookName)
         {
             throw new NotImplementedException();
         }
